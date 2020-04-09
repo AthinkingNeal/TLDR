@@ -150,7 +150,7 @@ def train(current_time, loaded_version):
     total_ite = 0
     lr = LR
     version = 1
-    pool = False 
+
     criterion = AlphaLoss()
     dataset = SelfPlayDataset()
     
@@ -173,81 +173,89 @@ def train(current_time, loaded_version):
         state = create_state(version, lr, total_ite, optimizer)
         player.save_models(state, current_time)
     best_player = deepcopy(player)
+    best_player_in_queue = deepcopy(player)
 
     ## Callback after the evaluation is done, must be a closure
-    def new_agent(result):
-        if result:
-            nonlocal version, pending_player, current_time, \
-                    lr, total_ite, best_player 
+
+
+    while True:
+
+        whether_need_evaluation = False
+        ## Wait before the circular before is full
+
+        while True:
+            last_id = fetch_new_games(collection, dataset, last_id, loaded_version=loaded_version)
+            if(len(dataset) >= MOVES):
+                break
+            time.sleep(15)
+
+        print("[TRAIN] Circular buffer full !")
+        print("[TRAIN] Starting to train !")
+        dataloader = DataLoader(dataset, collate_fn=collate_fn, \
+                                batch_size=BATCH_SIZE, shuffle=True)
+
+        while True:
+            whether_break = False
+
+            batch_loss = []
+            for batch_idx, (state, move, winner) in enumerate(dataloader):
+                running_loss = []
+                lr, optimizer = update_lr(lr, optimizer, total_ite)
+
+                ## Evaluate a copy of the current network asynchronously
+                if total_ite % TRAIN_STEPS == 0:
+                    if (whether_need_evaluation):
+                        whether_break = True
+                        break
+                    whether_need_evaluation = True
+
+                example = {
+                    'state': state,
+                    'winner': winner,
+                    'move' : move
+                }
+                loss = train_epoch(player, optimizer, example, criterion)
+                running_loss.append(loss)
+
+                ## Print running loss
+                if total_ite % LOSS_TICK == 0:
+                    print("[TRAIN] current iteration: %d, averaged loss: %.3f"\
+                            % (total_ite, np.mean(running_loss)))
+                    batch_loss.append(np.mean(running_loss))
+                    running_loss = []
+
+                ## Fetch new games
+                if total_ite % REFRESH_TICK == 0:
+                    last_id = fetch_new_games(collection, dataset, last_id)
+
+                total_ite += 1
+
+            print("markmarkanmfnie-___________-------")
+
+            if len(batch_loss) > 0:
+                print("[TRAIN] Average backward pass loss : %.3f, current lr: %f" % (np.mean(batch_loss), lr))
+
+            if(whether_break):
+                break
+
+        # Evaluate
+        pending_player = deepcopy(player)
+        evaluate_result = evaluate(pending_player, best_player)
+        if evaluate_result:
             version += 1
             state = create_state(version, lr, total_ite, optimizer)
             best_player = pending_player
+            player = deepcopy(best_player_in_queue)
+            best_player_in_queue = deepcopy(best_player)
             pending_player.save_models(state, current_time)
             print("[EVALUATION] New best player saved !")
+
+
         else:
-            nonlocal last_id
+            print("[EVALUATION] Trained Model Does Not Perform Good !")
             ## Force a new fetch in case the player didnt improve
             last_id = fetch_new_games(collection, dataset, last_id)
 
-    ## Wait before the circular before is full
-    while len(dataset) < MOVES:
-        last_id = fetch_new_games(collection, dataset, last_id, loaded_version=loaded_version)
-        time.sleep(30)
 
-    print("[TRAIN] Circular buffer full !")
-    print("[TRAIN] Starting to train !")
-    dataloader = DataLoader(dataset, collate_fn=collate_fn, \
-                            batch_size=BATCH_SIZE, shuffle=True)
 
-    while True:
-        batch_loss = []
-        for batch_idx, (state, move, winner) in enumerate(dataloader):
-            running_loss = []
-            lr, optimizer = update_lr(lr, optimizer, total_ite)
 
-            ## Evaluate a copy of the current network asynchronously
-            if total_ite % TRAIN_STEPS == 0:
-                if (pool):
-                    pending_player = deepcopy(player)
-                    last_id = fetch_new_games(collection, dataset, last_id)
-
-                    ## Wait in case an evaluation is still going on
-                    # if pool:
-                    #     print("[EVALUATION] Waiting for eval to end before re-eval")
-                    #     pool.close()
-                    #     pool.join()
-                    pool = MyPool(1)
-                    try:
-                        pool.apply_async(evaluate, args=(pending_player, best_player), \
-                                callback=new_agent)
-                        pool.close()
-                        pool.join()
-                    except Exception as e:
-                        client.close()
-                        pool.terminate()
-                pool = True
-
-            example = {
-                'state': state,
-                'winner': winner,
-                'move' : move
-            }
-            loss = train_epoch(player, optimizer, example, criterion)
-            running_loss.append(loss)
-
-            ## Print running loss
-            if total_ite % LOSS_TICK == 0:
-                print("[TRAIN] current iteration: %d, averaged loss: %.3f"\
-                        % (total_ite, np.mean(running_loss)))
-                batch_loss.append(np.mean(running_loss))
-                running_loss = []
-
-            ## Fetch new games
-            if total_ite % REFRESH_TICK == 0:
-                last_id = fetch_new_games(collection, dataset, last_id)
-
-            total_ite += 1
-
-        if len(batch_loss) > 0:
-            print("[TRAIN] Average backward pass loss : %.3f, current lr: %f" % (np.mean(batch_loss), lr))
-    

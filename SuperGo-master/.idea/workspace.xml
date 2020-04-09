@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="dea03d60-09e9-4159-ae04-b00a7f3a8d02" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/const.py" beforeDir="false" afterPath="$PROJECT_DIR$/const.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/lib/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +20,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="zizheng_dev" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1Yv5ySmNKaPA6tzc32iu94ou0N4" />
@@ -32,11 +40,12 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Results" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib" />
     <property name="settings.editor.selected.configurable" value="MTConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib" />
       <recent name="$PROJECT_DIR$/Results" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -90,6 +99,9 @@
       <list>
         <item itemvalue="Python.purge" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.purge" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.purge" />
       </list>
     </recent_temporary>
   </component>
@@ -114,7 +126,8 @@
       <workItem from="1584892157595" duration="8772000" />
       <workItem from="1584886650996" duration="3637000" />
       <workItem from="1584926338572" duration="6652000" />
-      <workItem from="1585011754232" duration="6203000" />
+      <workItem from="1585011754232" duration="8637000" />
+      <workItem from="1586431186403" duration="6731000" />
     </task>
     <servers />
   </component>
@@ -156,11 +169,15 @@
     </state>
     <state x="437" y="188" key="SettingsEditor/0.0.1707.960@0.0.1707.960" timestamp="1583842899139" />
     <state x="369" y="442" key="SettingsEditor/67.27.2493.1413@67.27.2493.1413" timestamp="1583810906096" />
-    <state x="534" y="634" width="489" height="234" key="com.intellij.ide.util.TipDialog" timestamp="1585011759863">
+    <state x="534" y="634" width="489" height="234" key="com.intellij.ide.util.TipDialog" timestamp="1586431217824">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
     <state x="320" y="412" width="489" height="234" key="com.intellij.ide.util.TipDialog/0.0.1707.960@0.0.1707.960" timestamp="1583840650592" />
-    <state x="534" y="634" width="691" height="344" key="com.intellij.ide.util.TipDialog/67.27.2493.1413@67.27.2493.1413" timestamp="1585011759863" />
+    <state x="534" y="634" width="691" height="344" key="com.intellij.ide.util.TipDialog/67.27.2493.1413@67.27.2493.1413" timestamp="1586431217824" />
+    <state x="1161" y="620" width="457" height="170" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1586431975973">
+      <screen x="67" y="27" width="2493" height="1413" />
+    </state>
+    <state x="1161" y="620" width="457" height="170" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/67.27.2493.1413@67.27.2493.1413" timestamp="1586431975973" />
     <state x="583" y="164" width="724" height="915" key="find.popup" timestamp="1585043953018">
       <screen x="67" y="27" width="2493" height="1413" />
     </state>
