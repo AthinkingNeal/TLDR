@@ -80,7 +80,7 @@ def play(player, opponent):
 
     ## Create the evaluation match queue of processes
     queue, results = create_matches(deepcopy(player), opponent=deepcopy(opponent), \
-                cores=PARALLEL_EVAL, match_number=EVAL_MATCHS) 
+                cores=PARALLEL_EVAL, match_number=EVAL_MATCHS)
     try:
         queue.join()
         
@@ -93,6 +93,10 @@ def play(player, opponent):
             if result:
                 final_result.append(pickle.loads(result))
         print("[EVALUATION] Done fetching")
+
+    except Exception as error:
+        print(error)
+
     finally:
         queue.close()
         results.close()

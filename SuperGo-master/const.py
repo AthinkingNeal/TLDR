@@ -84,6 +84,6 @@ REFRESH_TICK = 128
 
 ## Number of matches against its old version to evaluate
 ## the newly trained network
-EVAL_MATCHS = 20
+EVAL_MATCHS = 10
 ## Threshold to keep the new neural net
-EVAL_THRESH = 0.55
+EVAL_THRESH = 0.6

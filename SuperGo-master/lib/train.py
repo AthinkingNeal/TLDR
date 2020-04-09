@@ -244,9 +244,9 @@ def train(current_time, loaded_version):
         if evaluate_result:
             version += 1
             state = create_state(version, lr, total_ite, optimizer)
-            best_player = pending_player
+            best_player = deepcopy(pending_player)
             player = deepcopy(best_player_in_queue)
-            best_player_in_queue = deepcopy(best_player)
+            best_player_in_queue = deepcopy(pending_player)
             pending_player.save_models(state, current_time)
             print("[EVALUATION] New best player saved !")
 
